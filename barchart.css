@@ -3,6 +3,7 @@ body {
 }
 
 .axis path,
+
 .axis line {
   fill: none;
   stroke: #000;
@@ -10,11 +11,13 @@ body {
 }
 
 .bar {
-  fill: orange;
+    fill: #3D428B;
+    fill-opacity: 0.7;
 }
 
 .bar:hover {
-  fill: orangered ;
+    fill: #B92636;
+    fill-opacity: 0.7;
 }
 
 .x.axis path {
@@ -49,5 +52,3 @@ body {
   /*top: 100%;*/
   /*left: 0;*/
 /*}*/
-
-.bar { fill: steelblue; }

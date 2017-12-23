@@ -32,7 +32,7 @@ var initialize = function (nodes) {
     }
 };
 var render, conf = [];
-var colorResize = d3.scaleLinear().range(['#ff2b36', '#4ab6ff']).domain([0, 1])
+var colorResize = d3.scaleLinear().range(['#B92636', 'white', '#3D428B']).domain([-1, 0, 1])
 var layout = function (node, link1, link2, graph, index_graph) {
 
     var nodes_g = node
@@ -160,7 +160,7 @@ var tool_tip = d3.tip()
     });
 svg.call(tool_tip);
 
-d3.json("rrr2.json", function (graph) {
+d3.json("./data/view1.json", function (graph) {
 
 
     render = function (year) {
@@ -197,7 +197,10 @@ d3.json("rrr2.json", function (graph) {
             tc = d3.sum(c, function (d) {
                 return d.count
             });
-            pp = to / (to + tc);
+                           if (to > tc) {
+                                pp = to / (to + tc);
+                           } else {
+                           pp = - to / (to + tc)};
             aaa = graph['nodes_'][year];
             // debugger
             for (var ij = 0; ij < aaa.length; ij++) {
