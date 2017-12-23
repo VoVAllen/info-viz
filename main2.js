@@ -10,12 +10,12 @@ var resizeWidth2 = d3.scaleLinear().range([0.5, 5]);
 
 var osvg = d3.select("body")
     .insert("svg", ":first-child")
-    .attr("id","main")
+    .attr("id", "main")
     // .attr("class","four wide column" )
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom);
 var svg = osvg
-    // .append('g')
+// .append('g')
     .attr("width", 1200)
     .attr("height", 1200)
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -32,7 +32,7 @@ var initialize = function (nodes) {
     }
 };
 var render, conf = [];
-
+var colorResize = d3.scaleLinear().range(['#ff2b36', '#4ab6ff']).domain([0, 1])
 var layout = function (node, link1, link2, graph, index_graph) {
 
     var nodes_g = node
@@ -44,12 +44,15 @@ var layout = function (node, link1, link2, graph, index_graph) {
     nodes_g.append("foreignObject")
 
         .attr("x", function (d) {
-            theta = Math.acos(d.x / radius);
-            return resizeRadius(d.count) * Math.cos(theta)
+            // theta = Math.acos(d.x / radius);
+            // return resizeRadius(d.count) * Math.cos(theta)
+            return resizeRadius(d.count) * 0.9
         })
         .attr("y", function (d) {
-            theta = Math.acos(d.x / radius);
-            return resizeRadius(d.count) * Math.sin(theta)*1.05
+            // theta = Math.acos(d.x / radius);
+            // return resizeRadius(d.count) * Math.sin(theta)
+            // debugger
+            return resizeRadius(d.count) * 0.9
         })
         .attr("width", 200)
         .attr("height", 200)
@@ -62,7 +65,11 @@ var layout = function (node, link1, link2, graph, index_graph) {
         .attr('cx', 0)
         .attr('cy', 0)
         .attr('r', function (d) {return resizeRadius(d.count)})
-        .attr('fill', "#B92636")
+        .attr('fill', function (d) {
+            // debugger;
+            // console.log(d.pp)
+            return colorResize(d.pp)
+        })
         .on('mouseover', tool_tip.show)
         .on('mouseout', tool_tip.hide);
     ;
@@ -154,24 +161,14 @@ var tool_tip = d3.tip()
 svg.call(tool_tip);
 
 d3.json("rrr2.json", function (graph) {
+
+
     render = function (year) {
+
         d3.selectAll("#main > *").remove();
         var links = graph.links;
         graph.nodes = graph['nodes_'][year];
         // debugger
-        venue_list = graph.nodes.map(function (d) {return d.venue});
-        graph.links1 = links[year].filter(function (d) {
-            return (conf.indexOf(d.original) > -1) && (venue_list.indexOf(d.original) > -1) && (venue_list.indexOf(d.cites) > -1)
-        });
-        graph.links2 = links[year].filter(function (d) {
-            return conf.indexOf(d.cites) > -1 && (venue_list.indexOf(d.original) > -1) && (venue_list.indexOf(d.cites) > -1)
-        });
-        resizeRadius.domain(d3.extent(graph.nodes, function (d) {return d.count}));
-        resizeOpacity1.domain(d3.extent(graph.links1, function (d) {return d.count}));
-        resizeOpacity2.domain(d3.extent(graph.links2, function (d) {return d.count}));
-        resizeWidth1.domain(d3.extent(graph.links1, function (d) {return d.count}));
-        resizeWidth2.domain(d3.extent(graph.links2, function (d) {return d.count}));
-
 
         var index_graph = function (nodes) {
             var map = {};
@@ -180,6 +177,46 @@ d3.json("rrr2.json", function (graph) {
             });
             return map;
         }(graph.nodes);
+        venue_list = graph.nodes.map(function (d) {return d.venue});
+        graph.links1 = links[year].filter(function (d) {
+            return (conf.indexOf(d.original) > -1) && (venue_list.indexOf(d.original) > -1) && (venue_list.indexOf(d.cites) > -1)
+        });
+        graph.links2 = links[year].filter(function (d) {
+            return conf.indexOf(d.cites) > -1 && (venue_list.indexOf(d.original) > -1) && (venue_list.indexOf(d.cites) > -1)
+        });
+        venue_list.forEach(function (v, index) {
+            o = links[year].filter(function (d) {
+                return d.original === v
+            });
+            c = links[year].filter(function (d) {
+                return d.cites === v
+            });
+            to = d3.sum(o, function (d) {
+                return d.count
+            });
+            tc = d3.sum(c, function (d) {
+                return d.count
+            });
+            pp = to / (to + tc);
+            aaa = graph['nodes_'][year];
+            // debugger
+            for (var ij = 0; ij < aaa.length; ij++) {
+                if (aaa[ij].venue === v) {
+                    console.log("tttt")
+                    graph.nodes[ij].pp = pp;
+                }
+            }
+            // graph['nodes_'][year][v].pp=pp;
+            // console.log('max');
+            // console.log(max);
+        });
+        console.log(111)
+        console.debug(graph)
+        resizeRadius.domain(d3.extent(graph.nodes, function (d) {return d.count}));
+        resizeOpacity1.domain(d3.extent(graph.links1, function (d) {return d.count}));
+        resizeOpacity2.domain(d3.extent(graph.links2, function (d) {return d.count}));
+        resizeWidth1.domain(d3.extent(graph.links1, function (d) {return d.count}));
+        resizeWidth2.domain(d3.extent(graph.links2, function (d) {return d.count}));
 
 
         // d3.select("#year").on("input", function () {
@@ -198,7 +235,7 @@ d3.json("rrr2.json", function (graph) {
             .data(graph.links1)
             .enter()
             .append("path")
-            .attr("stroke", '#ee4c50')
+            .attr("stroke", '#B92636')
             .attr("stroke-width", function (d) {
                 return resizeWidth1(d.count);
             });
@@ -208,7 +245,7 @@ d3.json("rrr2.json", function (graph) {
             .data(graph.links2)
             .enter()
             .append("path")
-            .attr("stroke", '#8194ff')
+            .attr("stroke", '#3D428B')
             .attr("stroke-width", function (d) {
                 return resizeWidth2(d.count);
             });
@@ -233,7 +270,7 @@ d3.json("rrr2.json", function (graph) {
             .on('mouseover', function (d, i) {
                 this.children[1].setAttribute("fill-opacity", 0.5);
                 // debugger
-                bar_render(d.venue,parseInt($('input[type="range"]').val()))
+                bar_render(d.venue, parseInt($('input[type="range"]').val()))
 
             }).on('mouseleave', function (d, i) {
                 this.children[1].setAttribute("fill-opacity", 1)
