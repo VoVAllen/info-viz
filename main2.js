@@ -55,7 +55,7 @@ var layout = function (node, link1, link2, graph, index_graph) {
         .attr('cx', 0)
         .attr('cy', 0)
         .attr('r', function (d) {return resizeRadius(d.count)})
-        .attr('fill', "#6867e8");
+        .attr('fill', "#e88146");
     link1
         .attr("x1", function (d) {
             return offset + graph.nodes[index_graph[d.original]].x;
