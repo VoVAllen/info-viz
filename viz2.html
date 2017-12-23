@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Viz2</title>
+    <script src="d3.v4.js"></script>
+
+</head>
+<body>
+<script>
+
+    var margin = {top: 20, right: 20, bottom: 20, left: 20},
+        width = 1600 - margin.left - margin.right,
+        height = 1600 - margin.top - margin.bottom;
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+    var rerange = d3.scaleLinear().range([10, 50]).domain([400, 4000]);
+    // var line = d3.line().curve(d3.curveBasisOpen);
+    // var
+    d3.json("./rrr/data2.json", function (data) {
+        var count = 0;
+        // debugger
+        var xxx = d3.scaleLinear().range([0, 600]).domain([0, 150]);
+        var height = 50;
+        var greyScale = d3.scaleLinear().range([ "#FFFFFF","#000000"]).domain([10, 150]);
+        map = data['paper_life'];
+
+        Object.keys(map).forEach(function (key) {
+            value = map[key];
+            count += 1;
+            var count2 = 0;
+            var sum = new Array(value.length);
+            sum[0] = 0;
+            for (var i = 1; i < value.length; i++) {
+                sum[i] = sum[i - 1] + value[i - 1]
+            }
+            // debugger
+
+            var lll = svg.append('g')
+                .selectAll("rect")
+                .data(sum)
+                .enter();
+            l2 = svg.append("text")
+                .text(key)
+
+                .attr("x", function (d) {
+                    return d + 100
+                })
+                .attr('dy', '1.5em')
+                .attr('dx', '1.5em')
+                .attr("y", function (d) { return count * height})
+            // .selectAll("rect")
+            lll.append('rect')
+                .attr("x", function (d,index) {
+                    return index*50 + 100
+                })
+                .attr("y", function (d) { return count * height})
+                .attr("width", function (d, index) {
+                    count2++;
+                    // debugger;
+                    return 50 + "px"
+                })
+                .attr("height", function (d) { return height + "px"})
+                .attr("stroke","white")
+                .attr("fill", function (d, index) {
+                    return greyScale(value[index])
+                });
+            lll.append('text')
+                .text(function (d, index) {
+                    return index+1
+                })
+                .attr("fill","#5639ee")
+                .attr("x", function (d,index) {
+                    return index*50 + 100
+                })
+                .attr('dy', '5em')
+                .attr('dx','20px')
+                .attr("y", function (d) { return count * height})
+        });
+        // for (var i = 0; i < data['paper_life'].length; i++) {
+        //     Q = data['paper_life'][i];
+        //     max_Q = data['max'];
+        //     svg.append(rect)
+        //         .data(Q)
+        //         .enter()
+        //         .attr("x1", function () {
+        //
+        //         })
+        // }
+    })
+</script>
+</body>
+</html>
