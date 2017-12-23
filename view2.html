@@ -32,14 +32,13 @@
     var color = d3.scaleOrdinal(d3.schemeCategory20);
     var rerange = d3.scaleLinear().range([10, 50]).domain([400, 4000]);
 
-    var tt_data;
+    var dat;
     var dropdown;
 
     function extracted(data, conf) {
         data = data[conf];
         var count = 0;
-        // debugger
-        var xxx = d3.scaleLinear().range([0, 600]).domain([0, 150]);
+        var colorRange = d3.scaleLinear().range([0, 600]).domain([0, 150]);
         var height = 50;
         var greyScale = d3.scaleLinear().range(["#FFFFFF", "#654EA3"]).domain([0, 1]);
         map = data;
@@ -47,107 +46,92 @@
         Object.keys(map).forEach(function (key) {
             value = map[key];
             count += 1;
-            var count2 = 0;
             var sum = new Array(value.length);
             sum[0] = 0;
             for (var i = 1; i < value.length; i++) {
                 sum[i] = sum[i - 1] + value[i - 1]
             }
             console.log(key)
-            // debugger
 
-            var lll = svg.append('g')
+            var boxes = svg.append('g')
                 .selectAll("rect")
                 .data(sum)
                 .enter();
-            l2 = svg.append("text")
+                                 
+            y_ax = svg.append("text")
                 .text(key)
-
-                .attr("x", function (d) {
-
-                    // return d + 100
-                })
                 .attr('dy', '1.5em')
                 .attr('dx', '1.5em')
-                .attr("y", function (d) { return count * height})
-            // .selectAll("rect")
-            lll.append('rect')
+                .attr("y", function (d) {
+                      return count * height
+                })
+                                 
+            boxes.append('rect')
                 .attr("x", function (d, index) {
                     return index * 50 + 100
                 })
-                .attr("y", function (d) { return count * height})
+                .attr("y", function (d) {
+                      return count * height
+                })
                 .attr("width", function (d, index) {
-                    count2++;
-                    // debugger;
                     return 50 + "px"
                 })
-                .attr("height", function (d) { return height + "px"})
+                .attr("height", function (d) {
+                    return height + "px"
+                })
                 .attr("stroke", "white")
                 .attr("fill", function (d, index) {
                     return greyScale(value[index])
                 });
-            lll.append('text')
+                                 
+            boxes.append('text')
                 .text(function (d, index) {
                     return index + 1
                 })
-                .attr("fill", "#5639ee")
+                .attr("fill", "#654EA3")
                 .attr("x", function (d, index) {
                     return index * 50 + 100
                 })
                 .attr('dy', '5em')
                 .attr('dx', '20px')
-                .attr("y", function (d) { return count * height})
-        });
-        // for (var i = 0; i < data['paper_life'].length; i++) {
-        //     Q = data['paper_life'][i];
-        //     max_Q = data['max'];
-        //     svg.append(rect)
-        //         .data(Q)
-        //         .enter()
-        //         .attr("x1", function () {
-        //
-        //         })
-        // }
+                .attr("y", function (d) {
+                      return count * height
+                })
+            });
     }
 
     d3.json("./data/view2.json", function (data) {
-        tt_data = data;
-        extracted(tt_data, "IEEE Transactions on Pattern Analysis and Machine Intelligence");
-        // debugger
-        keys = Object.keys(tt_data)
-        vvv = [];
+        dat = data;
+        extracted(dat, "IEEE Transactions on Pattern Analysis and Machine Intelligence");
+        keys = Object.keys(dat)
+        conf_list = [];
         for (var i = 0; i < keys.length; i++) {
             if (keys[i] === "IEEE Transactions on Pattern Analysis and Machine Intelligence") {
-
-                vvv.push({
+                conf_list.push({
                     name: keys[i],
                     value: keys[i],
                     selected: true
                 })
             } else {
-                vvv.push({
+                conf_list.push({
                     name: keys[i],
                     value: keys[i]
                 })
             }
         }
-        console.log(vvv)
+        console.log(conf_list)
         $('.ui.dropdown')
             .dropdown({
-
-                values: vvv
+                values: conf_list
             })
         ;
         $('.ui.dropdown')
             .dropdown({
-
                 onChange: function (e) {
-                    // debugger
-                    extracted(tt_data, e)
+                    extracted(dat, e)
                 }
             })
         ;
-        // debugger
     })
 </script>
 <script>
