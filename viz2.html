@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Viz2</title>
+    <link rel="stylesheet" href="barchart.css">
     <script src="jquery-3.2.1.min.js"></script>
     <script src="d3.v4.js"></script>
     <script src="semantic.min.js"></script>
@@ -17,7 +18,7 @@
     <i class="dropdown icon"></i>
 </div>
 <div id="svg"></div>
-
+<script src="barchart.js"></script>
 <script>
 
     var margin = {top: 20, right: 20, bottom: 20, left: 20},
@@ -40,7 +41,7 @@
         // debugger
         var xxx = d3.scaleLinear().range([0, 600]).domain([0, 150]);
         var height = 50;
-        var greyScale = d3.scaleLinear().range(["#FFFFFF", "#000000"]).domain([0, 1]);
+        var greyScale = d3.scaleLinear().range(["#FFFFFF", "#654EA3"]).domain([0, 1]);
         map = data;
 
         Object.keys(map).forEach(function (key) {

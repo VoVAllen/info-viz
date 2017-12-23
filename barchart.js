@@ -9,12 +9,21 @@ var bar_x = d3.scaleBand()
 var bar_y = d3.scaleLinear()
     .range([bheight, 0]);
 
-var bbsvg = d3.select("body").append("svg")
+var bbsvg = d3.select("#v2").append("svg")
     .attr("id", "bbar")
+    .attr("style","margin-top:100px")
     // .id("bar")
     .attr("width", bwidth + bmargin.left + bmargin.right)
     .attr("height", bheight + bmargin.top + bmargin.bottom)
 
+var bar_tip = d3.tip()
+    .attr("class", "d3-tip")
+    .offset([0, 0])
+    .html(function (d) {
+        console.log(d);
+        return d.title + " " + d.count;
+    });
+// bbsvg.call(bar_tip);
 // bsvg.renderlet(function (chart) {
 //   // rotate x-axis labels
 //   chart.selectAll('g.x text')
@@ -95,7 +104,11 @@ function bar_render(conf, year) {
         .attr("y", function (d) {
             return bar_y(d.count);
         })
-        .attr("height", function (d) { return bheight - bar_y(d.count); });
+        .attr("height", function (d) { return bheight - bar_y(d.count); })
+        .call(bar_tip)
+        .on('mouseover', bar_tip.show)
+        .on('mouseout', bar_tip.hide);
+    ;
 
     // add the x Axis
     bsvg.append("g")

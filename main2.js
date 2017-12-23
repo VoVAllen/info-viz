@@ -1,7 +1,7 @@
 var margin = {top: 20, right: 20, bottom: 20, left: 20},
     width = 1600 - margin.left - margin.right,
     height = 1600 - margin.top - margin.bottom,
-    offset = 500;
+    offset = 425;
 var resizeRadius = d3.scaleLinear().range([10, 50]);
 var resizeOpacity1 = d3.scaleLinear().range([0.2, 0.8]);
 var resizeOpacity2 = d3.scaleLinear().range([0.2, 0.8]);
@@ -9,17 +9,18 @@ var resizeWidth1 = d3.scaleLinear().range([0.5, 5]);
 var resizeWidth2 = d3.scaleLinear().range([0.5, 5]);
 
 var osvg = d3.select("body")
-    .append("svg")
+    .insert("svg", ":first-child")
     .attr("id","main")
+    // .attr("class","four wide column" )
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom);
 var svg = osvg
     // .append('g')
-    .attr("width", 1000)
+    .attr("width", 1200)
     .attr("height", 1200)
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 var color = d3.scaleOrdinal(d3.schemeCategory20);
-var radius = 400;
+var radius = 350;
 
 var initialize = function (nodes) {
     for (var i = 0, n = nodes.length, node; i < n; ++i) {
@@ -61,7 +62,7 @@ var layout = function (node, link1, link2, graph, index_graph) {
         .attr('cx', 0)
         .attr('cy', 0)
         .attr('r', function (d) {return resizeRadius(d.count)})
-        .attr('fill', "#e88146")
+        .attr('fill', "#B92636")
         .on('mouseover', tool_tip.show)
         .on('mouseout', tool_tip.hide);
     ;
