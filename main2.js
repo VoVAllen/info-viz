@@ -8,9 +8,15 @@ var resizeOpacity2 = d3.scaleLinear().range([0.2, 0.8]);
 var resizeWidth1 = d3.scaleLinear().range([0.5, 5]);
 var resizeWidth2 = d3.scaleLinear().range([0.5, 5]);
 
-var svg = d3.select("body").append("svg")
+var osvg = d3.select("body")
+    .append("svg")
+    .attr("id","main")
     .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("height", height + margin.top + margin.bottom);
+var svg = osvg
+    // .append('g')
+    .attr("width", 1000)
+    .attr("height", 1200)
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 var radius = 400;
@@ -42,7 +48,7 @@ var layout = function (node, link1, link2, graph, index_graph) {
         })
         .attr("y", function (d) {
             theta = Math.acos(d.x / radius);
-            return resizeRadius(d.count) * Math.sin(theta)
+            return resizeRadius(d.count) * Math.sin(theta)*1.05
         })
         .attr("width", 200)
         .attr("height", 200)
@@ -148,9 +154,10 @@ svg.call(tool_tip);
 
 d3.json("rrr2.json", function (graph) {
     render = function (year) {
-        d3.selectAll("svg > *").remove();
+        d3.selectAll("#main > *").remove();
         var links = graph.links;
         graph.nodes = graph['nodes_'][year];
+        // debugger
         venue_list = graph.nodes.map(function (d) {return d.venue});
         graph.links1 = links[year].filter(function (d) {
             return (conf.indexOf(d.original) > -1) && (venue_list.indexOf(d.original) > -1) && (venue_list.indexOf(d.cites) > -1)
@@ -223,7 +230,9 @@ d3.json("rrr2.json", function (graph) {
                 render(year)
             })
             .on('mouseover', function (d, i) {
-                this.children[1].setAttribute("fill-opacity", 0.5)
+                this.children[1].setAttribute("fill-opacity", 0.5);
+                // debugger
+                bar_render(d.venue,parseInt($('input[type="range"]').val()))
 
             }).on('mouseleave', function (d, i) {
                 this.children[1].setAttribute("fill-opacity", 1)
@@ -235,7 +244,7 @@ d3.json("rrr2.json", function (graph) {
         layout(node, link1, link2, graph, index_graph);
     };
 
-    render(2009)
+    render(2009);
     // debugger
     $('#add-all').on('click', function (e) {
         conf = graph.nodes.map(function (d) {return d.venue});

@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Viz1</title>
+    <script src="echarts.simple.min.js"></script>
     <link rel="stylesheet" href="rangeslider.css">
     <link rel="stylesheet" href="tip.css">
+    <link rel="stylesheet" href="barchart.css">
     <script src="d3.v4.js"></script>
     <script src="vue.js"></script>
     <script src="jquery-3.2.1.min.js"></script>
@@ -16,9 +18,11 @@
 <button id="clear-all">Clear All</button>
 <button id="add-all">Add All</button>
 <div class="rangeslider-wrap" style="width: 500px;margin-left: 200px;">
-  <input type="range" min="2001" max="2017" step="1" id="year" labels="2001, 2017">
+    <input type="range" min="2001" max="2017" step="1" id="year" labels="2001, 2017">
 </div>
+
 <script src="slider.js"></script>
 <script src="main2.js"></script>
+<script src="barchart.js"></script>
 </body>
 </html>
