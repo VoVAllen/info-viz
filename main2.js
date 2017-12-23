@@ -25,7 +25,7 @@ var initialize = function (nodes) {
     }
 };
 var render, conf = [];
-var tooltip;
+
 var layout = function (node, link1, link2, graph, index_graph) {
 
     var nodes_g = node
@@ -56,30 +56,9 @@ var layout = function (node, link1, link2, graph, index_graph) {
         .attr('cy', 0)
         .attr('r', function (d) {return resizeRadius(d.count)})
         .attr('fill', "#e88146")
-        // .call(tip)
-        .on("click", function (e) {
-            console.log(e)
-            if (conf.indexOf(e.venue) > -1) {
-                // debugger
-                conf = conf.filter(function (d) {
-                    return d !== e.venue
-                })
-            }
-            else {
-                conf.push(e.venue);
-            }
-            console.log(conf)
-            render(year)
-        }).on('mouseover', function (d, i) {
-        this.setAttribute("fill-opacity", 0.5);
-        tooltip = svg.append('g');
-        return tip.show;
-
-    }).on('mouseleave', function (d, i) {
-        this.setAttribute("fill-opacity", 1);
-        // return tip.hide
-
-    });
+        .on('mouseover', tool_tip.show)
+        .on('mouseout', tool_tip.hide);
+    ;
     link1
         .attr("x1", function (d) {
             return offset + graph.nodes[index_graph[d.original]].x;
@@ -157,11 +136,16 @@ var layout = function (node, link1, link2, graph, index_graph) {
 //         console.log(value)
 //     }
 // });
-tip = d3.tip().attr('class', 'd3-tip').html(function (d, i) {
-    console.log(d);
-    console.log(i)
-    return "aaa";
-});
+
+var tool_tip = d3.tip()
+    .attr("class", "d3-tip")
+    .offset([-8, 0])
+    .html(function (d) {
+        console.log(d)
+        return "Count: " + d.count;
+    });
+svg.call(tool_tip);
+
 d3.json("rrr2.json", function (graph) {
     render = function (year) {
         d3.selectAll("svg > *").remove();
@@ -226,6 +210,25 @@ d3.json("rrr2.json", function (graph) {
             .selectAll("g")
             .data(graph.nodes)
             .enter().append("g")
+            .on("click", function (e) {
+                if (conf.indexOf(e.venue) > -1) {
+                    // debugger
+                    conf = conf.filter(function (d) {
+                        return d !== e.venue
+                    })
+                }
+                else {
+                    conf.push(e.venue);
+                }
+                render(year)
+            })
+            .on('mouseover', function (d, i) {
+                this.children[1].setAttribute("fill-opacity", 0.5)
+
+            }).on('mouseleave', function (d, i) {
+                this.children[1].setAttribute("fill-opacity", 1)
+
+            });
 
         initialize(graph.nodes);
         // debugger
