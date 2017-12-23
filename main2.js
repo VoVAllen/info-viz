@@ -107,7 +107,10 @@ var layout = function (node, link1, link2, graph, index_graph) {
                 debugger
             }
             return resizeOpacity1(d.count)
-        });
+        })
+        .call(link_tip)
+        .on("mouseover",link_tip.show)
+        .on("mouseout",link_tip.hide);
 
     link2
         .attr("x1", function (d) {
@@ -141,7 +144,10 @@ var layout = function (node, link1, link2, graph, index_graph) {
         .attr("fill-opacity", 0)
         .attr("stroke-opacity", function (d) {
             return resizeOpacity1(d.count);
-        });
+        })
+        .call(link_tip)
+        .on("mouseover",link_tip.show)
+        .on("mouseout",link_tip.hide);
 };
 
 //
@@ -159,6 +165,13 @@ var tool_tip = d3.tip()
         return "Count: " + d.count;
     });
 svg.call(tool_tip);
+
+var link_tip = d3.tip()
+    .attr("class", "d3-tip")
+    // .offset([-8, 0])
+    .html(function (d) {
+        return "Count: " + d.count;
+    });
 
 d3.json("rrr2.json", function (graph) {
 
