@@ -19,12 +19,12 @@ var initialize = function (nodes) {
     for (var i = 0, n = nodes.length, node; i < n; ++i) {
         node = nodes[i];
         node.index = i;
-        var  angle = 2 * Math.PI / nodes.length;
+        var angle = 2 * Math.PI / nodes.length;
         node.x = radius * Math.cos(angle * i);
         node.y = radius * Math.sin(angle * i);
     }
 };
-var render,conf=[];
+var render, conf = [];
 
 var layout = function (node, link1, link2, graph, index_graph) {
 
@@ -37,11 +37,13 @@ var layout = function (node, link1, link2, graph, index_graph) {
     nodes_g.append("foreignObject")
 
         .attr("x", function (d) {
-            theta=Math.acos(d.x/radius);
-            return resizeRadius(d.count)*Math.cos(theta) })
+            theta = Math.acos(d.x / radius);
+            return resizeRadius(d.count) * Math.cos(theta)
+        })
         .attr("y", function (d) {
-            theta=Math.acos(d.x/radius);
-            return resizeRadius(d.count)*Math.sin(theta) })
+            theta = Math.acos(d.x / radius);
+            return resizeRadius(d.count) * Math.sin(theta)
+        })
         .attr("width", 200)
         .attr("height", 200)
         .append('xhtml:p')
@@ -73,18 +75,18 @@ var layout = function (node, link1, link2, graph, index_graph) {
             mid_x = (x1 + x2) / 2;
             mid_y = (y1 + y2) / 2;
 
-            r=100;
-            l=1/2*Math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
-            theta=Math.atan(r/l);
+            r = 100;
+            l = 1 / 2 * Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+            theta = Math.atan(r / l);
 
             // delta_x=100;
             // delta_y
-            return line([[x1, y1], [mid_x + r*Math.sin(theta), mid_y - r*Math.cos(theta)], [x2, y2]]).toString();
+            return line([[x1, y1], [mid_x + r * Math.sin(theta), mid_y - r * Math.cos(theta)], [x2, y2]]).toString();
 
         })
         .attr("fill-opacity", 0)
         .attr("stroke-opacity", function (d) {
-            if (isNaN(resizeOpacity1(d.count))){
+            if (isNaN(resizeOpacity1(d.count))) {
                 debugger
             }
             return resizeOpacity1(d.count)
@@ -110,13 +112,13 @@ var layout = function (node, link1, link2, graph, index_graph) {
             mid_x = (x1 + x2) / 2;
             mid_y = (y1 + y2) / 2;
 
-            r=100;
-            l=1/2*Math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
-            theta=Math.atan(r/l);
+            r = 100;
+            l = 1 / 2 * Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+            theta = Math.atan(r / l);
 
             // delta_x=100;
             // delta_y
-            return line([[x1, y1], [mid_x - r*Math.sin(theta), mid_y + r*Math.cos(theta)], [x2, y2]]).toString();
+            return line([[x1, y1], [mid_x - r * Math.sin(theta), mid_y + r * Math.cos(theta)], [x2, y2]]).toString();
 
         })
         .attr("fill-opacity", 0)
@@ -133,16 +135,16 @@ var layout = function (node, link1, link2, graph, index_graph) {
 // });
 
 d3.json("rrr2.json", function (graph) {
-    render=function (year) {
+    render = function (year) {
         d3.selectAll("svg > *").remove();
         var links = graph.links;
         graph.nodes = graph['nodes_'][year];
-        venue_list=graph.nodes.map(function(d){return d.venue});
+        venue_list = graph.nodes.map(function (d) {return d.venue});
         graph.links1 = links[year].filter(function (d) {
-            return (conf.indexOf(d.original) > -1)&&(venue_list.indexOf(d.original)>-1)&&(venue_list.indexOf(d.cites)>-1)
+            return (conf.indexOf(d.original) > -1) && (venue_list.indexOf(d.original) > -1) && (venue_list.indexOf(d.cites) > -1)
         });
         graph.links2 = links[year].filter(function (d) {
-            return conf.indexOf(d.cites) > -1&&(venue_list.indexOf(d.original)>-1)&&(venue_list.indexOf(d.cites)>-1)
+            return conf.indexOf(d.cites) > -1 && (venue_list.indexOf(d.original) > -1) && (venue_list.indexOf(d.cites) > -1)
         });
         resizeRadius.domain(d3.extent(graph.nodes, function (d) {return d.count}));
         resizeOpacity1.domain(d3.extent(graph.links1, function (d) {return d.count}));
@@ -207,11 +209,11 @@ d3.json("rrr2.json", function (graph) {
                     conf.push(e.venue);
                 }
                 render(year)
-            }).on('mouseover',function (d,i) {
-                this.children[1].setAttribute("fill-opacity",0.5)
+            }).on('mouseover', function (d, i) {
+                this.children[1].setAttribute("fill-opacity", 0.5)
 
-            }).on('mouseleave',function (d,i) {
-                this.children[1].setAttribute("fill-opacity",1)
+            }).on('mouseleave', function (d, i) {
+                this.children[1].setAttribute("fill-opacity", 1)
 
             });
 
@@ -222,12 +224,12 @@ d3.json("rrr2.json", function (graph) {
 
     render(2009)
     // debugger
-    $('#add-all').on('click',function (e) {
-        conf=graph.nodes.map(function(d){return d.venue});
+    $('#add-all').on('click', function (e) {
+        conf = graph.nodes.map(function (d) {return d.venue});
         render(parseInt($('input[type="range"]').val()))
     });
-    $('#clear-all').on('click',function (e) {
-        conf=[];
+    $('#clear-all').on('click', function (e) {
+        conf = [];
         render(parseInt($('input[type="range"]').val()))
     });
 });
