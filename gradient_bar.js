@@ -3,7 +3,8 @@ var legend = function () {
 
     var w = 140, h = 400;
 
-    var key = d3.select("#v2").append("svg").attr("width", w).attr("height", h);
+    var key = d3.select("#svg1 > svg").insert("g",":first-child").attr("width", w).attr("height", h)
+    .attr("transform", "translate(" + 25 + "," + 100 + ")");;
 
     var legend = key.append("defs").append("svg:linearGradient").attr("id", "gradient").attr("x1", "100%").attr("y1", "0%").attr("x2", "100%").attr("y2", "100%").attr("spreadMethod", "pad");
 
