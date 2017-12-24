@@ -21,6 +21,12 @@ var svg = my_svg
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 var radius = 350;
 
+var cursorX;
+var cursorY;
+document.onmousemove = function (e) {
+    cursorX = e.pageX;
+    cursorY = e.pageY;
+};
 var initialize = function (nodes) {
     for (var i = 0, n = nodes.length, node; i < n; ++i) {
         node = nodes[i];
@@ -30,7 +36,7 @@ var initialize = function (nodes) {
         node.y = radius * Math.sin(angle * i);
     }
 };
-
+var global_graph;
 var render, conf = [];
 var colorResize = d3.scaleLinear().range(['#b92636', 'white', '#3d428b']).domain([-1, 0, 1])
 var layout = function (node, link1, link2, graph, index_graph) {
@@ -41,7 +47,7 @@ var layout = function (node, link1, link2, graph, index_graph) {
             y = offset + d.y;
             return "translate(" + x + ',' + y + ')'
         });
-    
+
     my_node.append("foreignObject")
         .attr("x", function (d) {
             return resizeRadius(d.count) * 0.9
@@ -56,7 +62,7 @@ var layout = function (node, link1, link2, graph, index_graph) {
         .html(function (d) {
             return d.venue
         });
-    
+
     my_node.append('circle')
         .attr('cx', 0)
         .attr('cy', 0)
@@ -69,7 +75,7 @@ var layout = function (node, link1, link2, graph, index_graph) {
         .on('mouseover', tool_tip.show)
         .on('mouseout', tool_tip.hide);
     ;
-    
+
     link1
         .attr("x1", function (d) { return offset + graph.nodes[index_graph[d.original]].x; })
         .attr("y1", function (d) { return offset + graph.nodes[index_graph[d.original]].y; })
@@ -110,7 +116,7 @@ var layout = function (node, link1, link2, graph, index_graph) {
         .attr("x2", function (d) { return offset + graph.nodes[index_graph[d.cites]].x; })
         .attr("y2", function (d) { return offset + graph.nodes[index_graph[d.cites]].y; })
         .attr('d', function (d) {
-            
+
             x1 = offset + graph.nodes[index_graph[d.original]].x;
             y1 = offset + graph.nodes[index_graph[d.original]].y;
             x2 = offset + graph.nodes[index_graph[d.cites]].x;
@@ -132,6 +138,18 @@ var layout = function (node, link1, link2, graph, index_graph) {
         .attr("stroke-opacity", function (d) {
             return resizeOpacity1(d.count);
         });
+
+    try {
+        link1.call(link_tip)
+            .on('mouseover', link_tip.show)
+            .on('mouseout', link_tip.hide);
+
+        link2.call(link_tip)
+            .on('mouseover', link_tip.show)
+            .on('mouseout', link_tip.hide);
+    } catch (err) {
+
+    }
 };
 
 
@@ -142,10 +160,21 @@ var tool_tip = d3.tip()
         console.log(d)
         return "# Pubs: " + d.count;
     });
+
+var link_tip = d3.tip()
+    .attr("class", "d3-tip")
+    .offset([0,0])
+    .html(function (d) {
+        console.log(d)
+        return "Counts: " + d.count;
+    });
+
+// link_tip
 svg.call(tool_tip);
 
 
 d3.json("./data/view1.json", function (graph) {
+    global_graph = graph
     render = function (year) {
 
         d3.selectAll("#main > *").remove();
@@ -159,17 +188,17 @@ d3.json("./data/view1.json", function (graph) {
             });
             return map;
         }(graph.nodes);
-        
+
         venue_list = graph.nodes.map(function (d) {return d.venue});
-        
+
         graph.links1 = links[year].filter(function (d) {
             return (conf.indexOf(d.original) > -1) && (venue_list.indexOf(d.original) > -1) && (venue_list.indexOf(d.cites) > -1)
         });
-        
+
         graph.links2 = links[year].filter(function (d) {
             return conf.indexOf(d.cites) > -1 && (venue_list.indexOf(d.original) > -1) && (venue_list.indexOf(d.cites) > -1)
         });
-        
+
         venue_list.forEach(function (v, index) {
             o = links[year].filter(function (d) {
                 return d.original === v
@@ -186,7 +215,9 @@ d3.json("./data/view1.json", function (graph) {
             if (to > tc) {
                 cr = to / (to + tc);
             } else {
-                cr = - tc / (to + tc)};
+                cr = -tc / (to + tc)
+            }
+            ;
             year_list = graph['nodes_'][year];
             for (var k = 0; k < year_list.length; k++) {
                 if (year_list[k].venue === v) {
@@ -211,7 +242,9 @@ d3.json("./data/view1.json", function (graph) {
             .attr("stroke-width", function (d) {
                 return resizeWidth1(d.count);
             });
-        
+        // link1.on("mouseover", link_tip.show)
+        //     .on("mouseout", link_tip.hide);
+
         var link2 = svg.append("g")
             .attr("class", "links2")
             .selectAll("path")
@@ -222,6 +255,10 @@ d3.json("./data/view1.json", function (graph) {
             .attr("stroke-width", function (d) {
                 return resizeWidth2(d.count);
             });
+
+        // .call(link_tip)
+        // .on("mouseover",link_tip.show)
+        // .on("mouseout",link_tip.hide);
 
         var node = svg.append("g")
             .attr("class", "nodes")
