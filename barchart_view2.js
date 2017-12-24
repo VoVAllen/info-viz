@@ -55,23 +55,6 @@ d3.json("./data/barchart.json", function (error, d) {
 
 function bar_render(conf, year) {
     d3.selectAll("#bbar > *").remove();
-    d3.selectAll("#legend").remove();
-    var legend=bbsvg.insert("g",":first-child")
-        .attr("id","legend")
-        // .attr("transform","")
-        .attr("height",40)
-        .append("g")
-        // .attr()
-    legend.append("rect")
-        .attr("width",20)
-        .attr("height",20)
-        .attr("y",-30)
-        .attr("x",30)
-        .attr("fill","#3D428B")
-        .attr("fill-opacity",0.7)
-    legend.append("text")
-        .attr("x",40)
-        .text("")
     bsvg = bbsvg
         .append("g")
         .attr("transform",
