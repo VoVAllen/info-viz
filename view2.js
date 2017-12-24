@@ -95,23 +95,23 @@ function extracted_v1(data, conf) {
                    return count * height
              })
 
-         boxes.append('text')
-             .text(function (d, index) {
-                 if (count===1) {
-                     return index + 1+2000
-                 }else{
-                     return ""
-                 }
-             })
-             .attr("fill", "#654EA3")
-             .attr("x", function (d, index) {
-                 return index * 50 + 100
-             })
-             .attr('dy', '-20')
-             .attr('dx', '10')
-             .attr("y", function (d) {
-                   return count * height
-             })
+         // boxes.append('text')
+         //     .text(function (d, index) {
+         //         if (count===1) {
+         //             return index + 1+2000
+         //         }else{
+         //             return ""
+         //         }
+         //     })
+         //     .attr("fill", "#654EA3")
+         //     .attr("x", function (d, index) {
+         //         return index * 50 + 100
+         //     })
+         //     .attr('dy', '-20')
+         //     .attr('dx', '10')
+         //     .attr("y", function (d) {
+         //           return count * height
+         //     })
     });
 }
 
