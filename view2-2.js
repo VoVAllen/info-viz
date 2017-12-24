@@ -62,9 +62,13 @@ function extracted(data, conf) {
                 return greyScale(value[index])
             })
             .on("mouseover", function (d) {
-                byear=this.y.baseVal['value']/height+2000
-                bconf=$("#d2").dropdown('get value')
-                bar_render(bconf,byear)
+                this.setAttribute("stroke", "black");
+                byear = this.y.baseVal['value'] / height + 2000;
+                bconf = $("#d1").dropdown('get value');
+                bar_render(bconf, byear)
+                })
+            .on('mouseleave', function (d, i) {
+                this.setAttribute("stroke", "white");
             });
 
 
@@ -78,19 +82,19 @@ function extracted(data, conf) {
             .attr("y", function (d) { return count * height})
             .attr("dx", 10)
             .attr("dy", 25);
-        // boxes.append('text')
-        //     .text(function (d, index) {
-        //         return index + 1
-        //     })
-        //     .attr("fill", "#654EA3")
-        //     .attr("x", function (d, index) {
-        //         return index * 50 + 100
-        //     })
-        //     .attr('dy', '5em')
-        //     .attr('dx', '20px')
-        //     .attr("y", function (d) {
-        //           return count * height
-        //     })
+         boxes.append('text')
+             .text(function (d, index) {
+                 return index + 1
+             })
+             .attr("fill", "#654EA3")
+             .attr("x", function (d, index) {
+                 return index * 50 + 100
+             })
+             .attr('dy', '5em')
+             .attr('dx', '20px')
+             .attr("y", function (d) {
+                   return count * height
+             })
     });
 }
 

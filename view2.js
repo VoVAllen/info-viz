@@ -2,7 +2,7 @@ var margin = {top: 20, right: 20, bottom: 20, left: 20},
     width = 1600 - margin.left - margin.right,
     height = 900 - margin.top - margin.bottom;
 
-var svgv1 = d3.select("#svg1").append("svg")
+var svg1 = d3.select("#svg1").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -30,13 +30,13 @@ function extracted_v1(data, conf) {
 //            sum[i] = sum[i - 1] + value[i - 1]
 //        }
         console.log(key)
-        // console.log(sum)
-        var boxes = svgv1.append('g')
+                             
+        var boxes = svg1.append('g')
             .selectAll("rect")
             .data(value)
             .enter();
 
-        y_ax = svgv1.append("text")
+        y_ax = svg1.append("text")
             .text(key)
             .attr('dy', '1.5em')
             .attr('dx', '1.5em')
@@ -62,9 +62,13 @@ function extracted_v1(data, conf) {
                 return greyScale(value[index])
             })
             .on("mouseover", function (d) {
+                this.setAttribute("stroke", "black");
                 byear = this.y.baseVal['value'] / height + 2000;
                 bconf = $("#d1").dropdown('get value');
                 bar_render(bconf, byear)
+            })
+            .on('mouseleave', function (d, i) {
+                this.setAttribute("stroke", "white");
             });
 
         boxes.append("text")
@@ -77,19 +81,19 @@ function extracted_v1(data, conf) {
             .attr("y", function (d) { return count * height})
             .attr("dx", 10)
             .attr("dy", 25);
-        // boxes.append('text')
-        //     .text(function (d, index) {
-        //         return index + 1
-        //     })
-        //     .attr("fill", "#654EA3")
-        //     .attr("x", function (d, index) {
-        //         return index * 50 + 100
-        //     })
-        //     .attr('dy', '5em')
-        //     .attr('dx', '20px')
-        //     .attr("y", function (d) {
-        //           return count * height
-        //     })
+         boxes.append('text')
+             .text(function (d, index) {
+                 return index + 1
+             })
+             .attr("fill", "#654EA3")
+             .attr("x", function (d, index) {
+                 return index * 50 + 100
+             })
+             .attr('dy', '5em')
+             .attr('dx', '20px')
+             .attr("y", function (d) {
+                   return count * height
+             })
     });
 }
 
