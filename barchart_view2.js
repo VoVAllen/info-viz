@@ -1,4 +1,4 @@
-var bmargin = {top: 20, right: 20, bottom: 30, left: 40},
+var bmargin = {top: 0, right: 20, bottom: 50, left: 40},
     bwidth = 600 - bmargin.left - bmargin.right,
     bheight = 400 - bmargin.top - bmargin.bottom;
 
@@ -11,7 +11,7 @@ var bar_y = d3.scaleLinear()
 console.log("yeah")
 var bbsvg = d3.select("#v2").append("svg")
     .attr("id", "bbar")
-    .attr("style","margin-top:100px")
+    .attr("style", "margin-top:100px")
     // .id("bar")
     .attr("width", bwidth + bmargin.left + bmargin.right)
     .attr("height", bheight + bmargin.top + bmargin.bottom)
@@ -55,6 +55,23 @@ d3.json("./data/barchart.json", function (error, d) {
 
 function bar_render(conf, year) {
     d3.selectAll("#bbar > *").remove();
+    d3.selectAll("#legend").remove();
+    var legend=bbsvg.insert("g",":first-child")
+        .attr("id","legend")
+        // .attr("transform","")
+        .attr("height",40)
+        .append("g")
+        // .attr()
+    legend.append("rect")
+        .attr("width",20)
+        .attr("height",20)
+        .attr("y",-30)
+        .attr("x",30)
+        .attr("fill","#3D428B")
+        .attr("fill-opacity",0.7)
+    legend.append("text")
+        .attr("x",40)
+        .text("")
     bsvg = bbsvg
         .append("g")
         .attr("transform",
@@ -99,4 +116,12 @@ function bar_render(conf, year) {
 
     bsvg.append("g")
         .call(d3.axisLeft(bar_y));
+    legend = bsvg.append("g")
+        .attr('transform',"translate(0," + height + ")")
+    legend.append('rect')
+        .attr("x",10)
+        .attr("width",20)
+        .attr("height",20)
+
+
 }

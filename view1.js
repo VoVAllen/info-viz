@@ -163,7 +163,7 @@ var tool_tip = d3.tip()
 
 var link_tip = d3.tip()
     .attr("class", "d3-tip")
-    .offset([0,0])
+    .offset([0, 0])
     .html(function (d) {
         console.log(d)
         return "Counts: " + d.count;
