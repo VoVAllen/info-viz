@@ -1,11 +1,10 @@
-var margin = {top: 20, right: 20, bottom: 20, left: 20},
+var margin = {top: 20, right: 20, bottom: 20, left: 100},
     width = 1600 - margin.left - margin.right,
     height = 900 - margin.top - margin.bottom;
 
 var svg1 = d3.select("#svg1").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 //var rerange = d3.scaleLinear().range([10, 50]).domain([400, 4000]);
 var format = d3.format(".2f");
@@ -30,13 +29,15 @@ function extracted_v1(data, conf) {
 //            sum[i] = sum[i - 1] + value[i - 1]
 //        }
         console.log(key)
-                             
+
         var boxes = svg1.append('g')
+
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
             .selectAll("rect")
             .data(value)
             .enter();
 
-        y_ax = svg1.append("text")
+        y_ax = boxes.append("text")
             .text(key)
             .attr('dy', '1.5em')
             .attr('dx', '1.5em')
@@ -81,37 +82,37 @@ function extracted_v1(data, conf) {
             .attr("y", function (d) { return count * height})
             .attr("dx", 10)
             .attr("dy", 25);
-         boxes.append('text')
-             .text(function (d, index) {
-                 return index + 1
-             })
-             .attr("fill", "#654EA3")
-             .attr("x", function (d, index) {
-                 return index * 50 + 100
-             })
-             .attr('dy', '5em')
-             .attr('dx', '20px')
-             .attr("y", function (d) {
-                   return count * height
-             })
+        boxes.append('text')
+            .text(function (d, index) {
+                return index + 1
+            })
+            .attr("fill", "#654EA3")
+            .attr("x", function (d, index) {
+                return index * 50 + 100
+            })
+            .attr('dy', '5em')
+            .attr('dx', '20px')
+            .attr("y", function (d) {
+                return count * height
+            })
 
-         // boxes.append('text')
-         //     .text(function (d, index) {
-         //         if (count===1) {
-         //             return index + 1+2000
-         //         }else{
-         //             return ""
-         //         }
-         //     })
-         //     .attr("fill", "#654EA3")
-         //     .attr("x", function (d, index) {
-         //         return index * 50 + 100
-         //     })
-         //     .attr('dy', '-20')
-         //     .attr('dx', '10')
-         //     .attr("y", function (d) {
-         //           return count * height
-         //     })
+        // boxes.append('text')
+        //     .text(function (d, index) {
+        //         if (count===1) {
+        //             return index + 1+2000
+        //         }else{
+        //             return ""
+        //         }
+        //     })
+        //     .attr("fill", "#654EA3")
+        //     .attr("x", function (d, index) {
+        //         return index * 50 + 100
+        //     })
+        //     .attr('dy', '-20')
+        //     .attr('dx', '10')
+        //     .attr("y", function (d) {
+        //           return count * height
+        //     })
     });
 }
 
