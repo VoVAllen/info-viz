@@ -1,6 +1,6 @@
 var margin = {top: 20, right: 20, bottom: 20, left: 20},
-        width = 1600 - margin.left - margin.right,
-        height = 1600 - margin.top - margin.bottom;
+    width = 1600 - margin.left - margin.right,
+    height = 900 - margin.top - margin.bottom;
 
 var svgv1 = d3.select("#svg1").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -8,7 +8,7 @@ var svgv1 = d3.select("#svg1").append("svg")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 //var rerange = d3.scaleLinear().range([10, 50]).domain([400, 4000]);
-    var format=d3.format(".2f");
+var format = d3.format(".2f");
 
 var dat;
 var dropdown;
@@ -41,15 +41,15 @@ function extracted_v1(data, conf) {
             .attr('dy', '1.5em')
             .attr('dx', '1.5em')
             .attr("y", function (d) {
-                  return count * height
-            })
+                return count * height
+            });
 
         boxes.append('rect')
             .attr("x", function (d, index) {
                 return index * 50 + 100
             })
             .attr("y", function (d) {
-                  return count * height
+                return count * height
             })
             .attr("width", function (d, index) {
                 return 50 + "px"
@@ -60,17 +60,23 @@ function extracted_v1(data, conf) {
             .attr("stroke", "white")
             .attr("fill", function (d, index) {
                 return greyScale(value[index])
+            })
+            .on("mouseover", function (d) {
+                byear = this.y.baseVal['value'] / height + 2000;
+                bconf = $("#d1").dropdown('get value');
+                bar_render(bconf, byear)
             });
+
         boxes.append("text")
-                .text(function (d, index) {
-                    return format(d)
-                })
-                .attr("x", function (d, index) {
-                    return index * 50 + 100
-                })
-                .attr("y", function (d) { return count * height})
-                .attr("dx",10)
-                .attr("dy",25);
+            .text(function (d, index) {
+                return format(d)
+            })
+            .attr("x", function (d, index) {
+                return index * 50 + 100
+            })
+            .attr("y", function (d) { return count * height})
+            .attr("dx", 10)
+            .attr("dy", 25);
         // boxes.append('text')
         //     .text(function (d, index) {
         //         return index + 1
@@ -84,7 +90,7 @@ function extracted_v1(data, conf) {
         //     .attr("y", function (d) {
         //           return count * height
         //     })
-        });
+    });
 }
 
 d3.json("./data/view2.json", function (data) {
