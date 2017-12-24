@@ -8,6 +8,7 @@ var svg = d3.select("#svg2").append("svg")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 //var rerange = d3.scaleLinear().range([10, 50]).domain([400, 4000]);
+    var format=d3.format(".2f");
 
 var dat;
 var dropdown;
@@ -34,15 +35,15 @@ function extracted(data, conf) {
             .selectAll("rect")
             .data(value)
             .enter();
-                             
+
         y_ax = svg.append("text")
             .text(key)
             .attr('dy', '1.5em')
             .attr('dx', '1.5em')
             .attr("y", function (d) {
                   return count * height
-            })
-                             
+            });
+
         boxes.append('rect')
             .attr("x", function (d, index) {
                 return index * 50 + 100
@@ -60,20 +61,31 @@ function extracted(data, conf) {
             .attr("fill", function (d, index) {
                 return greyScale(value[index])
             });
-                             
-        boxes.append('text')
-            .text(function (d, index) {
-                return index + 1
-            })
-            .attr("fill", "#654EA3")
-            .attr("x", function (d, index) {
-                return index * 50 + 100
-            })
-            .attr('dy', '5em')
-            .attr('dx', '20px')
-            .attr("y", function (d) {
-                  return count * height
-            })
+
+
+        boxes.append("text")
+                .text(function (d, index) {
+                    return format(d)
+                })
+                .attr("x", function (d, index) {
+                    return index * 50 + 100
+                })
+                .attr("y", function (d) { return count * height})
+                .attr("dx",10)
+                .attr("dy",25);
+        // boxes.append('text')
+        //     .text(function (d, index) {
+        //         return index + 1
+        //     })
+        //     .attr("fill", "#654EA3")
+        //     .attr("x", function (d, index) {
+        //         return index * 50 + 100
+        //     })
+        //     .attr('dy', '5em')
+        //     .attr('dx', '20px')
+        //     .attr("y", function (d) {
+        //           return count * height
+        //     })
         });
 }
 
@@ -97,12 +109,12 @@ d3.json("./data/view2.json", function (data) {
         }
     }
     console.log(conf_list)
-    $('.ui.dropdown')
+    $('#d2')
         .dropdown({
             values: conf_list
         })
     ;
-    $('.ui.dropdown')
+    $('#d2')
         .dropdown({
             onChange: function (e) {
                 extracted(dat, e)

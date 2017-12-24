@@ -1,18 +1,19 @@
 var margin = {top: 20, right: 20, bottom: 20, left: 20},
-    width = 1600 - margin.left - margin.right,
-    height = 1600 - margin.top - margin.bottom;
+        width = 1600 - margin.left - margin.right,
+        height = 1600 - margin.top - margin.bottom;
 
-var svg = d3.select("#svg1").append("svg")
+var svgv1 = d3.select("#svg1").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 //var rerange = d3.scaleLinear().range([10, 50]).domain([400, 4000]);
+    var format=d3.format(".2f");
 
 var dat;
 var dropdown;
 
-function extracted(data, conf) {
+function extracted_v1(data, conf) {
     data = data[conf];
     var count = 0;
     var colorRange = d3.scaleLinear().range([0, 600]).domain([0, 150]);
@@ -29,18 +30,18 @@ function extracted(data, conf) {
 //            sum[i] = sum[i - 1] + value[i - 1]
 //        }
         console.log(key)
-
-        var boxes = svg.append('g')
+        // console.log(sum)
+        var boxes = svgv1.append('g')
             .selectAll("rect")
-            .data(sum)
+            .data(value)
             .enter();
 
-        y_ax = svg.append("text")
+        y_ax = svgv1.append("text")
             .text(key)
             .attr('dy', '1.5em')
             .attr('dx', '1.5em')
             .attr("y", function (d) {
-                return count * height
+                  return count * height
             })
 
         boxes.append('rect')
@@ -48,7 +49,7 @@ function extracted(data, conf) {
                 return index * 50 + 100
             })
             .attr("y", function (d) {
-                return count * height
+                  return count * height
             })
             .attr("width", function (d, index) {
                 return 50 + "px"
@@ -60,26 +61,35 @@ function extracted(data, conf) {
             .attr("fill", function (d, index) {
                 return greyScale(value[index])
             });
-
-        boxes.append('text')
-            .text(function (d, index) {
-                return index + 1
-            })
-            .attr("fill", "#654EA3")
-            .attr("x", function (d, index) {
-                return index * 50 + 100
-            })
-            .attr('dy', '5em')
-            .attr('dx', '20px')
-            .attr("y", function (d) {
-                return count * height
-            })
-    });
+        boxes.append("text")
+                .text(function (d, index) {
+                    return format(d)
+                })
+                .attr("x", function (d, index) {
+                    return index * 50 + 100
+                })
+                .attr("y", function (d) { return count * height})
+                .attr("dx",10)
+                .attr("dy",25);
+        // boxes.append('text')
+        //     .text(function (d, index) {
+        //         return index + 1
+        //     })
+        //     .attr("fill", "#654EA3")
+        //     .attr("x", function (d, index) {
+        //         return index * 50 + 100
+        //     })
+        //     .attr('dy', '5em')
+        //     .attr('dx', '20px')
+        //     .attr("y", function (d) {
+        //           return count * height
+        //     })
+        });
 }
 
 d3.json("./data/view2.json", function (data) {
     dat = data;
-    extracted(dat, "IEEE Transactions on Pattern Analysis and Machine Intelligence");
+    extracted_v1(dat, "IEEE Transactions on Pattern Analysis and Machine Intelligence");
     keys = Object.keys(dat)
     conf_list = [];
     for (var i = 0; i < keys.length; i++) {
@@ -97,15 +107,15 @@ d3.json("./data/view2.json", function (data) {
         }
     }
     console.log(conf_list)
-    $('.ui.dropdown')
+    $('#d1')
         .dropdown({
             values: conf_list
         })
     ;
-    $('.ui.dropdown')
+    $('#d1')
         .dropdown({
             onChange: function (e) {
-                extracted(dat, e)
+                extracted_v1(dat, e)
             }
         })
     ;
