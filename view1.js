@@ -8,7 +8,7 @@ var resizeOpacity2 = d3.scaleLinear().range([0.2, 0.8]);
 var resizeWidth1 = d3.scaleLinear().range([0.5, 5]);
 var resizeWidth2 = d3.scaleLinear().range([0.5, 5]);
 
-var my_svg = d3.select("body")
+var my_svg = d3.select("#bd")
     .insert("svg", ":first-child")
     .attr("id", "main")
     .attr("width", width + margin.left + margin.right)

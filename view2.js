@@ -1,6 +1,6 @@
 var margin = {top: 20, right: 20, bottom: 20, left: 20},
-        width = 1600 - margin.left - margin.right,
-        height = 1600 - margin.top - margin.bottom;
+    width = 1600 - margin.left - margin.right,
+    height = 1600 - margin.top - margin.bottom;
 
 var svg = d3.select("#svg1").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -34,21 +34,21 @@ function extracted(data, conf) {
             .selectAll("rect")
             .data(sum)
             .enter();
-                             
+
         y_ax = svg.append("text")
             .text(key)
             .attr('dy', '1.5em')
             .attr('dx', '1.5em')
             .attr("y", function (d) {
-                  return count * height
+                return count * height
             })
-                             
+
         boxes.append('rect')
             .attr("x", function (d, index) {
                 return index * 50 + 100
             })
             .attr("y", function (d) {
-                  return count * height
+                return count * height
             })
             .attr("width", function (d, index) {
                 return 50 + "px"
@@ -60,7 +60,7 @@ function extracted(data, conf) {
             .attr("fill", function (d, index) {
                 return greyScale(value[index])
             });
-                             
+
         boxes.append('text')
             .text(function (d, index) {
                 return index + 1
@@ -72,9 +72,9 @@ function extracted(data, conf) {
             .attr('dy', '5em')
             .attr('dx', '20px')
             .attr("y", function (d) {
-                  return count * height
+                return count * height
             })
-        });
+    });
 }
 
 d3.json("./data/view2.json", function (data) {
