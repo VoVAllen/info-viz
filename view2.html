@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View 2</title>
+    <link rel="stylesheet" href="barchart.css">
+    <script src="jquery-3.2.1.min.js"></script>
+    <script src="d3.v4.js"></script>
+    <script src="semantic.min.js"></script>
+    <script src="dropdown.min.js"></script>
+    <link rel="stylesheet" href="dropdown.min.css">
+    <link rel="stylesheet" href="semantic.min.css">
+
+</head>
+
+<style>
+    #header {width: 100%; height: 100px; background-color: red;}
+    #col-1 {width: 48%; float: left;}
+    #col-2 {width: 48%; float: right;}
+</style>
+<body>
+<div id="col-1" style="margin-top:50px;margin-left:20px">
+    <div class="ui selection dropdown" style="margin-left:300px;">
+        <div class="text"></div>
+        <i class="dropdown icon"></i>
+    </div>
+    <div id="svg1"></div>
+<!--    <script src="barchart.js"></script>-->
+    <script src="view2.js"></script>
+</div>
+
+<div id="col-2" style="margin-top:50px;margin-left:20px">
+    <div class="ui selection dropdown" style="margin-left:300px;">
+        <div class="text"></div>
+        <i class="dropdown icon"></i>
+    </div>
+    <div id="svg2"></div>
+<!--    <script src="barchart.js"></script>-->
+    <script src="view2-2.js"></script>
+</div>
+</body>
+
+</html>
